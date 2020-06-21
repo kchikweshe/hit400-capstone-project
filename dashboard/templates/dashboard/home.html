@@ -1,0 +1,133 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_field %}
+{% load crispy_forms_tags %}
+{% load static %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" xmlns:dashboard="http://www.w3.org/1999/xhtml">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <h2 class="bg-success">Welcome to the ICT Investment Portal</h2>
+    <br><br><br>
+    <h6> To get started, click the <b>Download Template </b> button </h6>
+    <br>
+    <form action="#" enctype="multipart/form-data" method="POST">
+        {% load static %}
+        <a href="{% static 'media/template.csv' %}">
+            <button type="button" class="btn btn-block bg-primary">
+                Download Template
+            </button>
+        </a>
+    </form>
+
+    <br><br>
+    <h6> Upload the file , clicking the button below </h6>
+    <br>
+    <form enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        {% load static %}
+
+        <input type="file" id="customFile" name="file" accept="text/csv">
+
+        <button class="btn btn-block bg-primary" type="submit"> Upload Dataset</button>
+    </form>
+    <div class="custom-file">
+        <input type="file" class="custom-file-input" id="customFile">
+    </div>
+    {% if countries %}
+        {% load static %}
+        <div class="col-md-12 ">
+            <table class=" table   ">
+                <thead class="table-dark">
+                <tr class="flex-row">
+                    <th scope="col">Name</th>
+                    <th scope="col">Control of Corruption %</th>
+                    <th scope="col">Political Stability %</th>
+                    <th scope="col">Inflation Rate</th>
+                    <th scope="col">Gdp Growth %</th>
+                    <th scope="col">Ease of Doing Business %</th>
+                    <th scope="col">Unemployment Rate %</th>
+                    <th scope="col">Internet Usage Per Population</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for country in countries %}
+                    <tr>
+                        <td>{{ country.name }}</td>
+                        <td>{{ country.control_of_corruption }}</td>
+                        <td>{{ country.political_stability }}</td>
+                        <td>{{ country.inflation_rate }}</td>
+                        <td>{{ country.gdp_growth }}</td>
+                        <td> {{ country.ease_of_doing_business }}</td>
+                        <td> {{ country.unemployment_rate }}</td>
+                        <td>{{ country.individuals_using_the_internet }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    {% endif %}
+
+    <div>
+        {#            <form action="/decide">#}
+        {#                <button class="btn bg-primary btn-block" type="submit" }>#}
+        {#                    Select Best Alternative#}
+        {#                </button>#}
+        {#            </form>#}
+
+    </div>
+
+    <form action="/add-weights" method="POST">
+
+        <div id="indicators" class="col-sm-12">
+            <table id="example" class="table table-bordered paginaton">
+                <thead class="">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Weight</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    {% csrf_token %}
+                    {% for criterion in criteria_form.criteria %}
+
+                        <td>{{ criterion }}</td>
+                    {% endfor %}
+
+                </tr>
+                <tr>
+                    <td>{{ criteria_form.w1 }}</td>
+                    <td>{{ criteria_form.w2 }}</td>
+                    <td>{{ criteria_form.w3 }}</td>
+                    <td>{{ criteria_form.w4 }}</td>
+                    <td>{{ criteria_form.w5 }}</td>
+                    <td>{{ criteria_form.w6 }}</td>
+                    <td>{{ criteria_form.w7 }}</td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <button class="btn sm-primary btn-block" type="submit">
+            Submit
+        </button>
+    </form>
+
+{% endblock %}
+
+<script>
+    $(document).ready(function () {
+        $('example').DataTable();
+    });
+</script>
+

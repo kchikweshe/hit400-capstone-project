@@ -18,7 +18,7 @@ click==7.1.1
 colorama==0.3.7
 command-not-found==0.3
 contextvars==2.4
-cryptography==2.8
+cryptography==3.2
 cycler==0.10.0
 dashboard==0.0.2
 databases==0.2.6
